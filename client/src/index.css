@@ -1,0 +1,132 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root {
+  --noiseOpacity: 0.08;
+  --neonGreen: 0, 255, 160;
+  --neonRed: 255, 60, 90;
+}
+
+/* Light base UI + neon static/noise background */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  color: rgb(15 23 42);
+  position: relative;
+  background: #ffffff;
+}
+
+#root {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  background:
+    radial-gradient(
+      1000px 700px at 18% 12%,
+      rgba(var(--neonGreen), 0.22),
+      rgba(255, 255, 255, 0) 60%
+    ),
+    radial-gradient(
+      900px 650px at 85% 22%,
+      rgba(var(--neonRed), 0.12),
+      rgba(255, 255, 255, 0) 58%
+    ),
+    radial-gradient(
+      1200px 900px at 55% 90%,
+      rgba(var(--neonGreen), 0.10),
+      rgba(255, 255, 255, 0) 62%
+    ),
+    linear-gradient(180deg, #ffffff 0%, #f6f8fb 100%);
+}
+
+/* Static/noise layers on min-h-screen (root), so it stays consistent while scrolling */
+#root::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--noiseOpacity);
+  z-index: 0;
+  mix-blend-mode: multiply;
+  background-image:
+    repeating-linear-gradient(
+      0deg,
+      rgba(var(--neonGreen), 0.08) 0px,
+      rgba(var(--neonGreen), 0.08) 1px,
+      rgba(0, 0, 0, 0) 2px,
+      rgba(0, 0, 0, 0) 4px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      rgba(var(--neonRed), 0.03) 0px,
+      rgba(var(--neonRed), 0.03) 1px,
+      rgba(0, 0, 0, 0) 3px,
+      rgba(0, 0, 0, 0) 6px
+    );
+}
+
+#root::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(rgba(var(--neonGreen), 0.18) 1px, transparent 1px),
+    radial-gradient(rgba(var(--neonRed), 0.10) 1px, transparent 1px);
+  background-size: 22px 22px, 28px 28px;
+  background-position: 0 0, 10px 14px;
+  filter: blur(0.2px);
+}
+
+/* Ensure app content is above background layers */
+#root > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Selection/highlight should stay readable */
+::selection {
+  background: rgba(var(--neonGreen), 0.35);
+  color: #000;
+}
+
+/* Inputs/textareas must stay visible on light base */
+:where(input, textarea, select).input,
+:where(input, textarea, select).textarea,
+:where(input, textarea, select).select {
+  color: #0b1220;
+  background-color: rgba(255, 255, 255, 0.92);
+  border-color: rgba(0, 0, 0, 0.14);
+}
+
+:where(input, textarea).input::placeholder,
+:where(input, textarea).textarea::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+/* Make all buttons black with white text */
+.btn {
+  background-color: #000 !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+.btn:hover {
+  background-color: rgba(0, 0, 0, 0.86) !important;
+}
+.btn:disabled,
+.btn[disabled] {
+  background-color: rgba(0, 0, 0, 0.25) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+/* Small, tasteful neon focus ring */
+:where(a, button, input, textarea, select):focus-visible {
+  outline: 2px solid rgba(var(--neonGreen), 0.7);
+  outline-offset: 2px;
+}
